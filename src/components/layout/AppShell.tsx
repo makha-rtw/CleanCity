@@ -85,27 +85,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setLocale(locale === "fr" ? "wo" : "fr")}
-              aria-label="Changer la langue (Français / Wolof)"
-              className="h-9 px-2.5 rounded-full text-xs font-medium text-muted hover:text-ink border border-line bg-surface transition-colors"
-            >
-              {locale.toUpperCase()}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setIsAuthModalOpen(true)}
-              aria-label="Profil et points"
-              className="h-9 px-3 rounded-full text-xs font-medium bg-surface border border-line text-ink hover:bg-subtle transition-colors inline-flex items-center gap-1.5 whitespace-nowrap shrink-0"
-            >
-              <span>{firstName(user.name)}</span>
-              <span className="text-muted">·</span>
-              <span className="tabular font-semibold text-accent whitespace-nowrap">
-                {formatNumber(user.points)} pts
-              </span>
-            </button>
+            {pathname.startsWith("/citoyen") ? (
+              <button
+                type="button"
+                onClick={() => setIsAuthModalOpen(true)}
+                aria-label="Profil et points"
+                className="h-9 px-3 rounded-full text-xs font-medium bg-surface border border-line text-ink hover:bg-subtle transition-colors inline-flex items-center gap-1.5 whitespace-nowrap shrink-0"
+              >
+                <span>{firstName(user.name)}</span>
+                <span className="text-muted">·</span>
+                <span className="tabular font-semibold text-accent whitespace-nowrap">
+                  {formatNumber(user.points)} pts
+                </span>
+              </button>
+            ) : null}
 
             <button
               type="button"
