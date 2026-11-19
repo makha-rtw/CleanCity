@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400">
+  <rect width="640" height="400" fill="#F2F2EF"/>
+  <!-- Ligne d'eau calme -->
+  <rect x="0" y="220" width="640" height="45" fill="#DCE5E0"/>
+  <rect x="0" y="265" width="640" height="135" fill="#E6E5E1"/>
+  <ellipse cx="340" cy="288" rx="90" ry="18" fill="#16181A" opacity="0.1"/>
+  <circle cx="305" cy="280" r="14" fill="#373A38"/>
+  <circle cx="345" cy="276" r="17" fill="#525855"/>
+  <rect x="372" y="268" width="28" height="18" rx="4" fill="#676E6A"/>
+</svg>
