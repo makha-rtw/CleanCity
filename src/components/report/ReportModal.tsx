@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Camera,
   Check,
@@ -119,7 +120,12 @@ export function ReportModal() {
       aria-modal="true"
       aria-labelledby="report-dialog-title"
     >
-      <div className="w-full max-w-md bg-surface text-ink rounded-t-card sm:rounded-card border border-line shadow-lift overflow-hidden max-h-[92dvh] flex flex-col overscroll-contain">
+      <motion.div
+        initial={{ opacity: 0, y: 48, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-md bg-surface text-ink rounded-t-card sm:rounded-card border border-line shadow-lift overflow-hidden max-h-[92dvh] flex flex-col overscroll-contain"
+      >
         {/* En-tête minimal */}
         <div className="px-5 pt-4 pb-3 border-b border-line flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -163,8 +169,16 @@ export function ReportModal() {
           </button>
         </div>
 
-        {/* Corps */}
+        {/* Corps avec transition fluide entre les étapes */}
         <div className="p-5 overflow-y-auto flex-1 space-y-5">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -16 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            >
           {step === 1 && (
             <div className="space-y-4">
               <div className="relative rounded-card overflow-hidden border border-line bg-subtle aspect-[16/10]">
@@ -419,8 +433,10 @@ export function ReportModal() {
               </button>
             </div>
           )}
+            </motion.div>
+          </AnimatePresence>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

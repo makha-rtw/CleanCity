@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   Plus,
@@ -99,7 +99,7 @@ const FIVE_STEPS = [
 
 export default function LandingPage() {
   const { setIsReportModalOpen, setIsAuthModalOpen, reports } = useCleanCity();
-  const prefersReduced = useReducedMotion();
+  const prefersReduced = false;
 
   const [activeScene, setActiveScene] = useState(0);
   const [activeStep, setActiveStep] = useState(0);

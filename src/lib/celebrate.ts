@@ -2,7 +2,6 @@ import confetti from "canvas-confetti";
 
 export function celebrate() {
   if (typeof window === "undefined") return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const dark = document.documentElement.classList.contains("dark");
   confetti({
     particleCount: 70,

@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Check } from "lucide-react";
 import {
   WASTE_CATEGORIES,
@@ -46,7 +46,13 @@ export function InterventionTracker({ report }: { report: WasteReport }) {
   };
 
   return (
-    <div className="rounded-card bg-surface border border-line shadow-lift p-5 sm:p-6 space-y-6">
+    <motion.div
+      key={report.id}
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
+      className="rounded-card bg-surface border border-line shadow-lift p-5 sm:p-6 space-y-6"
+    >
       {/* En-tête du dossier sélectionné */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="space-y-1.5">
@@ -133,16 +139,23 @@ export function InterventionTracker({ report }: { report: WasteReport }) {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start pt-1">
         <div className="md:col-span-6 space-y-2">
           <div className="relative rounded-field overflow-hidden border border-line aspect-[16/10] bg-subtle">
-            <img
-              src={isCompleted && showAfter ? afterImage : report.photoBefore}
-              alt={`${report.quartier} ${
-                isCompleted && showAfter ? "après collecte" : "avant collecte"
-              }`}
-              width={640}
-              height={400}
-              loading="lazy"
-              className="w-full h-full object-cover"
-            />
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={isCompleted && showAfter ? "after" : "before"}
+                initial={{ opacity: 0, scale: 1.03 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
+                src={isCompleted && showAfter ? afterImage : report.photoBefore}
+                alt={`${report.quartier} ${
+                  isCompleted && showAfter ? "après collecte" : "avant collecte"
+                }`}
+                width={640}
+                height={400}
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
+            </AnimatePresence>
 
             {isCompleted ? (
               <div className="absolute top-3 left-3 inline-flex rounded-full bg-surface/95 backdrop-blur-xs border border-line p-0.5 text-xs shadow-soft">
@@ -191,6 +204,6 @@ export function InterventionTracker({ report }: { report: WasteReport }) {
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

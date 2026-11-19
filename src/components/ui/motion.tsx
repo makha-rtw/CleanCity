@@ -1,24 +1,19 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import {
-  motion,
-  useInView,
-  useReducedMotion,
-  animate,
-} from "framer-motion";
+import { motion, useInView, animate } from "framer-motion";
 
 export const EASE_OUT_EXPO: [number, number, number, number] = [
   0.22, 1, 0.36, 1,
 ];
 
 /**
- * Reveal block on scroll with smooth upward glide (Jawoo-style section entrance)
+ * Reveal block on scroll or mount — works reliably on mobile & desktop
  */
 export function Reveal({
   children,
   delay = 0,
-  y = 24,
+  y = 22,
   className = "",
 }: {
   children: React.ReactNode;
@@ -26,14 +21,12 @@ export function Reveal({
   y?: number;
   className?: string;
 }) {
-  const prefersReduced = useReducedMotion();
-
   return (
     <motion.div
-      initial={prefersReduced ? { opacity: 1 } : { opacity: 0, y }}
+      initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.65, delay, ease: EASE_OUT_EXPO }}
+      viewport={{ once: true, amount: 0.08 }}
+      transition={{ duration: 0.6, delay, ease: EASE_OUT_EXPO }}
       className={className}
     >
       {children}
@@ -42,7 +35,7 @@ export function Reveal({
 }
 
 /**
- * Staggered headline word-by-word or line-by-line reveal
+ * Staggered headline word-by-word reveal
  */
 export function AnimatedHeadline({
   text,
@@ -53,7 +46,6 @@ export function AnimatedHeadline({
   highlight?: string;
   className?: string;
 }) {
-  const prefersReduced = useReducedMotion();
   const words = text.split(" ");
 
   return (
@@ -72,14 +64,10 @@ export function AnimatedHeadline({
             className="inline-block overflow-hidden align-bottom mr-[0.26em] pb-1 -mb-1"
           >
             <motion.span
-              initial={
-                prefersReduced
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: "100%" }
-              }
+              initial={{ opacity: 0, y: "100%" }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
-                duration: 0.65,
+                duration: 0.6,
                 delay: i * 0.045,
                 ease: EASE_OUT_EXPO,
               }}
@@ -97,14 +85,14 @@ export function AnimatedHeadline({
 }
 
 /**
- * Animated number counter when scrolled into view
+ * Animated number counter when scrolled into view (mobile & desktop)
  */
 export function CountUp({
   to,
   decimals = 0,
   suffix = "",
   prefix = "",
-  duration = 1.6,
+  duration = 1.5,
 }: {
   to: number;
   decimals?: number;
@@ -113,28 +101,11 @@ export function CountUp({
   duration?: number;
 }) {
   const ref = useRef<HTMLSpanElement | null>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const prefersReduced = useReducedMotion();
-  const [display, setDisplay] = useState(() =>
-    prefersReduced
-      ? to.toLocaleString("fr-FR", {
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals,
-        })
-      : "0"
-  );
+  const inView = useInView(ref, { once: true, amount: 0.1 });
+  const [display, setDisplay] = useState("0");
 
   useEffect(() => {
     if (!inView) return;
-    if (prefersReduced) {
-      setDisplay(
-        to.toLocaleString("fr-FR", {
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals,
-        })
-      );
-      return;
-    }
 
     const controls = animate(0, to, {
       duration,
@@ -150,7 +121,7 @@ export function CountUp({
     });
 
     return () => controls.stop();
-  }, [inView, to, decimals, duration, prefersReduced]);
+  }, [inView, to, decimals, duration]);
 
   return (
     <span ref={ref} className="tabular">
@@ -162,25 +133,20 @@ export function CountUp({
 }
 
 /**
- * Smooth horizontal infinite ticker (pauses on hover & respects prefers-reduced-motion)
+ * Smooth horizontal infinite ticker (works on mobile & desktop)
  */
 export function MarqueeTicker({ items }: { items: string[] }) {
-  const prefersReduced = useReducedMotion();
   const doubled = [...items, ...items];
 
   return (
     <div className="relative overflow-hidden border-y border-line bg-surface/60 py-3.5 select-none">
       <motion.div
-        animate={prefersReduced ? { x: 0 } : { x: ["0%", "-50%"] }}
-        transition={
-          prefersReduced
-            ? undefined
-            : {
-                duration: 28,
-                ease: "linear",
-                repeat: Infinity,
-              }
-        }
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{
+          duration: 26,
+          ease: "linear",
+          repeat: Infinity,
+        }}
         className="flex items-center gap-8 whitespace-nowrap w-max"
       >
         {doubled.map((item, idx) => (

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Check, Camera, Sparkles } from "lucide-react";
 import { useCleanCity } from "@/lib/store";
 import {
@@ -157,8 +157,17 @@ function CitoyenContent() {
         })}
       </div>
 
-      {/* ONGLET 1 : SUIVI & CARTE */}
-      {activeTab === "suivi" && (
+      {/* Contenu de l'onglet actif avec transition fluide */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
+        >
+          {/* ONGLET 1 : SUIVI & CARTE */}
+          {activeTab === "suivi" && (
         <div className="space-y-6">
           {selectedReport ? (
             <InterventionTracker report={selectedReport} />
@@ -492,6 +501,8 @@ function CitoyenContent() {
           </div>
         </div>
       )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
